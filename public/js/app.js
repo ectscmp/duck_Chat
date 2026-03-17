@@ -29,7 +29,7 @@ if (PRELOADED_DUCK) {
             }
         });
 
-    duckSelect.addEventListener("change", async function() {
+    duckSelect.addEventListener("change", async function () {
         //console.log(this.value);
         activeDuck = duckSelect.options[duckSelect.selectedIndex].duck;
         console.log(activeDuck);
@@ -52,9 +52,15 @@ async function resetDuckUI() {
 async function loadDuck(duck) {
     document.getElementById("ThreeDuck").classList.add("waiting");
     const duckImg = document.getElementById("loading_img");
-    duckImg.src = "./images/Microwave_Duck.gif";
+    duckImg.src = "/images/Microwave_Duck.gif";
     duckImg.classList.add("microwave");
-    let stat_labels = ["strength", "focus", "health", "intelligence", "kindness"];
+    let stat_labels = [
+        "strength",
+        "focus",
+        "health",
+        "intelligence",
+        "kindness",
+    ];
     let row_labels = ["id", "name", "assembler", "adjectives", "bio"];
     for (let stat of stat_labels) {
         let elem = document.getElementById(`${stat}_bar`);
@@ -91,7 +97,7 @@ function displayDuckIdLink(element, duckId) {
     span.innerHTML = `<a href="${shareUrl}">${duckId}</a>`;
 }
 
-startChatBtn.addEventListener("click", async function() {
+startChatBtn.addEventListener("click", async function () {
     await startDuckChat(activeDuck);
     startChatBtn.style.display = "none";
 });
@@ -100,7 +106,8 @@ async function startDuckChat(duck) {
     chatBody.style.display = "block";
     conversation.push({
         role: "user",
-        content: "Introduce yourself as this duck. Mention your personality naturally based on your traits, and keep it fun.",
+        content:
+            "Introduce yourself as this duck. Mention your personality naturally based on your traits, and keep it fun.",
     });
     await streamDuckReply();
 }
@@ -149,7 +156,10 @@ async function streamDuckReply() {
         });
     } catch (err) {
         console.error(err);
-        appendMessage("duck", "Quack... something went wrong while I was talking.");
+        appendMessage(
+            "duck",
+            "Quack... something went wrong while I was talking.",
+        );
     }
 }
 
@@ -158,7 +168,8 @@ function appendMessage(role, text) {
     wrapper.className = "mb-3";
 
     const label = document.createElement("strong");
-    label.textContent = role === "user" ? "You: " : `Duck: ${activeDuck.name}`;
+    label.textContent =
+        role === "user" ? "You: " : `Duck (${activeDuck.name}): `;
 
     const span = document.createElement("span");
     span.textContent = text;
@@ -189,7 +200,7 @@ function appendStreamingMessage(role) {
     };
 }
 
-chatForm.addEventListener("submit", async function(e) {
+chatForm.addEventListener("submit", async function (e) {
     e.preventDefault();
     if (!activeDuck) return;
     const text = chatInput.value.trim();
