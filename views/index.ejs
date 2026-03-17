@@ -1,31 +1,36 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ECTS CMP Ducks!</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="/css/style.css" />
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= duck? `${duck.name} - ` :"" %>ECTS CMP Ducks!</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <% if(duck){ %>
+  <script>
+    window.PRELOADED_DUCK = <%- JSON.stringify(duck) %>;
+    window.SINGLE_DUCK_MODE = true
+  </script>
+  <%}%>
   </head>
   <body>
     <div class="container" id="main_container">
-      <div class="mb-3">
-        <label for="duckSelect" class="form-label">Please select a duck</label>
-        <select
-          id="duckSelect"
-          name="duckSelect"
-          class="form-select"
-          aria-label="Default select example"
-          placehoder="Select a duck"
-        >
-          <option selected disabled>Please Select a Duck</option>
-        </select>
-      </div>
+      <% if(duck){ %>
+  <h1 class="mb-4"><%= duck.name %></h1>
+  <%}%>
+        <% if(errorMessage){ %>
+  <div class="alert alert-warning" role="alert"><%= errorMessage %></div>
+  <%}%>
+  <% if(!duck){ %>
+
+  <div class="mb-3">
+    <label for="duckSelect" class="form-label">Please select a duck</label>
+    <select id="duckSelect" name="duckSelect" class="form-select" aria-label="Default select example" placehoder="Select a duck">
+      <option selected disabled>Please Select a Duck</option>
+    </select>
+  </div>
+  <%}%>
       <div class="row">
         <div class="col-md-6">
           <div id="ThreeDuck" class="waiting">
@@ -34,6 +39,12 @@
           </div>
         </div>
         <div class="col-md-6" id="duck_info_container">
+          <div id="id_row" class="d-flex align-items-center gap-2 flex-wrap">
+            <div class="stat_text">ID</div>
+            <div class="flex-grow-1 info-cell">
+              <span class="stat_val_span"></span>
+            </div>
+          </div>
           <div id="name_row" class="d-flex align-items-center gap-2 flex-wrap">
             <div class="stat_text">Name</div>
             <div class="flex-grow-1 info-cell">
@@ -84,7 +95,7 @@
           <div
             id="health_bar"
             class="d-flex align-items-center gap-2 flex-wrap"
-          >
+          ><div class="stat_text">Health</div>
             <div class="progress flex-grow-1">
               <div
                 class="progress-bar bg-primary"

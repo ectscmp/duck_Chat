@@ -4,6 +4,7 @@ require("dotenv").config();
 
 // import path to build safe paths/urls
 const path = require("path");
+const axios = require("axios");
 
 const Groq = require("groq-sdk");
 const groq = new Groq({
@@ -13,6 +14,10 @@ const groq = new Groq({
 const express = require("express");
 
 const app = express();
+// tell express to use ejs template
+app.set("view engine", "ejs");
+// tell express where to find template
+app.set("views", path.join(__dirname, "views"));
 
 const PORT = process.env.PORT || 3000;
 
@@ -178,6 +183,32 @@ app.post("/api/chat", async (req, res) => {
       res.write("\n[Stream error]");
       res.end();
     }
+  }
+});
+
+app.get("/", (req, res) => {
+  res.render("index", {
+    duck: null,
+    errorMessage: null,
+  });
+});
+
+app.get("/duck/:id", async (req, res) => {
+  try {
+    const duckId = req.params.id;
+    const response = await axios.get(
+      `https://api.ducks.ects-cmp.com/ducks/${duckId}`,
+    );
+    const duck = response.data;
+    res.render("index", {
+      duck,
+      errorMessage: null,
+    });
+    // res.send(response.data);
+  } catch (error) {
+    console.error(
+      `Failed to load duck: ${error?.response?.data || error.message}`,
+    );
   }
 });
 
