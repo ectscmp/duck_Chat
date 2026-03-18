@@ -185,7 +185,7 @@ function appendStreamingMessage(role) {
     wrapper.className = "mb-3";
 
     const label = document.createElement("strong");
-    label.textContent = role === "user" ? "You: " : `Duck: ${activeDuck.name}`;
+    label.textContent = role === "user" ? "You: " : `Duck: (${activeDuck.name}): `;
 
     const textSpan = document.createElement("span");
     textSpan.textContent = "";
