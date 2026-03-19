@@ -247,23 +247,18 @@ h6,
 
 #strength_bar .progress-bar {
   background-color: var(--strength) !important;
-  box-shadow: 0 0 8px var(--strength);
 }
 #health_bar .progress-bar {
   background-color: var(--health) !important;
-  box-shadow: 0 0 8px var(--health);
 }
 #intelligence_bar .progress-bar {
   background-color: var(--intelligence) !important;
-  box-shadow: 0 0 8px var(--intelligence);
 }
 #focus_bar .progress-bar {
   background-color: var(--focus) !important;
-  box-shadow: 0 0 8px var(--focus);
 }
 #kindness_bar .progress-bar {
   background-color: var(--kindness) !important;
-  box-shadow: 0 0 8px var(--kindness);
 }
 
 /* ── Duck Viewer ────────────────────────────────────────── */
