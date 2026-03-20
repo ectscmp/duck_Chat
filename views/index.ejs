@@ -123,31 +123,33 @@
     <!-- Chat Section -->
     <div class="row mt-4" id="chat_section" style="display: none">
       <div class="col-12">
-        <div class="card">
-          <div class="card-header duck-chat-header">
+        <div class="card duck-chat-card">
+          <div class="card-header duck-chat-header" id="chatToggle" role="button">
             <div class="duck-chat-info">
               <div class="duck-chat-status"></div>
               <div>
                 <div>Duck Chat</div>
-                <div class="duck-chat-subtitle">Start a conversation with this duck</div>
+                <div class="duck-chat-subtitle" id="duckChatSubtitle"></div>
               </div>
             </div>
+            <div class="duck-chat-chevron">&#9660;</div>
           </div>
-          <div id="startChatDiv">
-            <button id="startChatButton" class="btn btn-primary w-100">
-              Start Chat
-            </button>
-          </div>
-          <div class="card-body" id="chatBody">
-            <div id="chat_messages"></div>
-            <form id="chat_form" class="d-flex gap-2">
-              <input type="text" id="chat_input" class="form-control" placeholder="Ask the duck something..." />
-              <button type="submit" class="btn btn-primary">Send</button>
-            </form>
-            <div class="alert alert-danger mt-3 py-2 small">
-              <strong>Disclaimer:</strong> This AI is for entertainment purposes only. Do not share
-              personal or sensitive information. Responses will often be intentionally inaccurate and
-              should not be taken as advice or relied upon for decisions.
+          <div id="chatCollapse" class="duck-chat-collapse duck-chat-open">
+            <div id="startChatDiv" class="duck-chat-start">
+              <p class="duck-chat-ready-text"><span id="duckReadyName"></span> is ready to chat. Press start to begin.</p>
+              <button id="startChatButton" class="btn btn-primary duck-start-btn">START CHAT</button>
+            </div>
+            <div class="card-body" id="chatBody">
+              <div id="chat_messages"></div>
+              <form id="chat_form" class="d-flex gap-2">
+                <input type="text" id="chat_input" class="form-control" placeholder="Ask the duck something..." />
+                <button type="submit" class="btn btn-primary">Send</button>
+              </form>
+              <div class="alert alert-danger mt-3 py-2 small">
+                <strong>Disclaimer:</strong> This AI is for entertainment purposes only. Do not share
+                personal or sensitive information. Responses will often be intentionally inaccurate and
+                should not be taken as advice or relied upon for decisions.
+              </div>
             </div>
           </div>
         </div>

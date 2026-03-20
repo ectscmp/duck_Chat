@@ -5,6 +5,10 @@ const viewer = new DuckViewer(document.getElementById("ThreeDuck"));
 const duckSelect = document.getElementById("duckSelect");
 const STAT_MULTIPLIER = 10;
 const startChatBtn = document.getElementById("startChatButton");
+const chatToggle = document.getElementById("chatToggle");
+const chatCollapse = document.getElementById("chatCollapse");
+const chatChevron = chatToggle.querySelector(".duck-chat-chevron");
+const duckReadyName = document.getElementById("duckReadyName");
 let conversation = [];
 const chatBody = document.getElementById("chatBody");
 const chatForm = document.getElementById("chat_form");
@@ -39,15 +43,24 @@ if (PRELOADED_DUCK) {
 async function resetDuckUI() {
   await loadDuck(activeDuck);
   document.getElementById("chat_section").style.display = "block";
-  startChatBtn.style.display = "block";
+  duckReadyName.textContent = activeDuck.name;
+  document.getElementById("duckChatSubtitle").textContent = `Start a conversation with ${activeDuck.name}`;
+  document.getElementById("startChatDiv").style.display = "flex";
   chatBody.style.display = "none";
   chatMessages.innerHTML = "";
   conversation = [];
+  chatCollapse.classList.add("duck-chat-open");
+  chatChevron.classList.add("open");
   if (SINGLE_DUCK_MODE) {
-    startChatBtn.style.display = "none";
+    document.getElementById("startChatDiv").style.display = "none";
     await startDuckChat();
   }
 }
+
+chatToggle.addEventListener("click", function () {
+  const isOpen = chatCollapse.classList.toggle("duck-chat-open");
+  chatChevron.classList.toggle("open", isOpen);
+});
 
 async function loadDuck(duck) {
   document.getElementById("ThreeDuck").classList.add("waiting");
@@ -104,8 +117,8 @@ function displayDuckIdLink(element, duckId) {
 }
 
 startChatBtn.addEventListener("click", async function () {
+  document.getElementById("startChatDiv").style.display = "none";
   await startDuckChat(activeDuck);
-  startChatBtn.style.display = "none";
 });
 
 async function startDuckChat(duck) {
