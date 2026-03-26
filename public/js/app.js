@@ -44,11 +44,13 @@ async function resetDuckUI() {
   await loadDuck(activeDuck);
   document.getElementById("chat_section").style.display = "block";
   duckReadyName.textContent = activeDuck.name;
-  document.getElementById("duckChatSubtitle").textContent = `Start a conversation with ${activeDuck.name}`;
+  document.getElementById("duckChatSubtitle").textContent =
+    `Start a conversation with ${activeDuck.name}`;
   document.getElementById("startChatDiv").style.display = "flex";
   chatBody.style.display = "none";
   chatMessages.innerHTML = "";
   conversation = [];
+  document.querySelector(".duck-chat-status").classList.remove("online");
   chatCollapse.classList.add("duck-chat-open");
   chatChevron.classList.add("open");
   if (SINGLE_DUCK_MODE) {
@@ -123,6 +125,7 @@ startChatBtn.addEventListener("click", async function () {
 
 async function startDuckChat(duck) {
   chatBody.style.display = "block";
+  document.querySelector(".duck-chat-status").classList.add("online");
   conversation.push({
     role: "user",
     content:
@@ -165,7 +168,7 @@ async function streamDuckReply() {
       const chunk = decoder.decode(value, { stream: true });
       fullReply += chunk;
 
-      duckMessageElements.textSpan.textContent = fullReply;
+      duckMessageElements.textSpan.innerHTML = formatMessage(fullReply);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
@@ -179,42 +182,90 @@ async function streamDuckReply() {
   }
 }
 
+function escapeHtml(str) {
+  return str.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+
+function formatMessage(text) {
+  const parts = [];
+  const codeBlockRe = /```(\w*)\n?([\s\S]*?)```/g;
+  let lastIndex = 0;
+  let match;
+  while ((match = codeBlockRe.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push({ type: 'text', content: text.slice(lastIndex, match.index) });
+    }
+    parts.push({ type: 'code', lang: match[1] || '', content: match[2].trim() });
+    lastIndex = match.index + match[0].length;
+  }
+  if (lastIndex < text.length) {
+    parts.push({ type: 'text', content: text.slice(lastIndex) });
+  }
+  return parts.map(p => {
+    if (p.type === 'code') {
+      const langLabel = p.lang ? `<span class="chat-code-lang">${escapeHtml(p.lang)}</span>` : '<span></span>';
+      return `<div class="chat-code-block"><div class="chat-code-header">${langLabel}<button class="chat-copy-btn">Copy</button></div><pre><code>${escapeHtml(p.content)}</code></pre></div>`;
+    }
+    let html = escapeHtml(p.content);
+    html = html.replace(/`([^`\n]+)`/g, '<code class="chat-inline-code">$1</code>');
+    html = html.replace(/\n/g, '<br>');
+    return html;
+  }).join('');
+}
+
 function appendMessage(role, text) {
   const wrapper = document.createElement("div");
-  wrapper.className = "mb-3";
+  wrapper.className = `chat-message ${role}`;
 
-  const label = document.createElement("strong");
-  label.textContent = role === "user" ? "You: " : `Duck (${activeDuck.name}): `;
+  const sender = document.createElement("div");
+  sender.className = "chat-sender";
+  sender.textContent = role === "user" ? "You" : activeDuck.name;
 
-  const span = document.createElement("span");
-  span.textContent = text;
+  const bubble = document.createElement("div");
+  bubble.className = "chat-bubble";
+  if (role === "duck") {
+    bubble.innerHTML = formatMessage(text);
+  } else {
+    bubble.textContent = text;
+  }
 
-  wrapper.append(label, span);
+  wrapper.append(sender, bubble);
   chatMessages.appendChild(wrapper);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-/* Add an empty message that will be filled in gradually during streaming */
 function appendStreamingMessage(role) {
   const wrapper = document.createElement("div");
-  wrapper.className = "mb-3";
+  wrapper.className = `chat-message ${role}`;
 
-  const label = document.createElement("strong");
-  label.textContent =
-    role === "user" ? "You: " : `Duck: (${activeDuck.name}): `;
+  const sender = document.createElement("div");
+  sender.className = "chat-sender";
+  sender.textContent = activeDuck.name;
 
-  const textSpan = document.createElement("span");
+  const textSpan = document.createElement("div");
+  textSpan.className = "chat-bubble";
   textSpan.textContent = "";
 
-  wrapper.append(label, textSpan);
+  wrapper.append(sender, textSpan);
   chatMessages.appendChild(wrapper);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 
-  return {
-    wrapper,
-    textSpan,
-  };
+  return { wrapper, textSpan };
 }
+
+chatMessages.addEventListener("click", function (e) {
+  const btn = e.target.closest(".chat-copy-btn");
+  if (!btn) return;
+  const code = btn.closest(".chat-code-block").querySelector("code").textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    btn.textContent = "Copied!";
+    btn.classList.add("copied");
+    setTimeout(() => {
+      btn.textContent = "Copy";
+      btn.classList.remove("copied");
+    }, 2000);
+  });
+});
 
 chatForm.addEventListener("submit", async function (e) {
   e.preventDefault();
