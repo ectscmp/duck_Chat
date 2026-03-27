@@ -7,6 +7,7 @@
   <title><%= duck? `${duck.name} - ` :"" %>ECTS CMP Ducks!</title>
   <link rel="icon" type="image/x-icon" href="/images/DuckIcon64.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
   <% if(duck){ %>
   <script>
@@ -14,186 +15,166 @@
     window.SINGLE_DUCK_MODE = true
   </script>
   <%}%>
-  </head>
-  <body>
-    <div class="container" id="main_container">
-      <% if(duck){ %>
-  <h1 class="mb-4"><%= duck.name %></h1>
-  <%}%>
-        <% if(errorMessage){ %>
-  <div class="alert alert-warning" role="alert"><%= errorMessage %></div>
-  <%}%>
-  <% if(!duck){ %>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="site-title">
+        <img src="/images/DuckIcon64.png" class="site-logo" alt="Duck" />
+        <span class="site-title-text">ECTS CMP Ducks</span>
+      </div>
+    </div>
+  </header>
+  <div class="container" id="main_container">
 
-  <div class="mb-3">
-    <label for="duckSelect" class="form-label">Please select a duck</label>
-    <select id="duckSelect" name="duckSelect" class="form-select" aria-label="Default select example" placehoder="Select a duck">
-      <option selected disabled>Please Select a Duck</option>
-    </select>
-  </div>
-  <%}%>
-      <div class="row">
-        <div class="col-md-6">
-          <div id="ThreeDuck" class="waiting">
-            <img src="/images/Loading_Duck 1.gif" id="loading_img" alt="" />
-            <div class="placeholder">Please select a duck to load</div>
-          </div>
-        </div>
-        <div class="col-md-6" id="duck_info_container">
-          <div id="id_row" class="d-flex align-items-center gap-2 flex-wrap">
-            <div class="stat_text">ID</div>
-            <div class="flex-grow-1 info-cell">
-              <span class="stat_val_span"></span>
-            </div>
-          </div>
-          <div id="name_row" class="d-flex align-items-center gap-2 flex-wrap">
-            <div class="stat_text">Name</div>
-            <div class="flex-grow-1 info-cell">
-              <span class="stat_val_span"></span>
-            </div>
-          </div>
+    <% if(errorMessage){ %>
+    <div class="alert alert-warning" role="alert"><%= errorMessage %></div>
+    <%}%>
 
-          <div
-            id="assembler_row"
-            class="d-flex align-items-center gap-2 flex-wrap"
-          >
-            <div class="stat_text">Assembler</div>
-            <div class="flex-grow-1 info-cell">
-              <span class="stat_val_span"></span>
-            </div>
-          </div>
-          <div
-            id="adjectives_row"
-            class="d-flex align-items-center gap-2 flex-wrap"
-          >
-            <div class="stat_text">Adjectives</div>
-            <div class="flex-grow-1 info-cell">
-              <span class="stat_val_span"></span>
-            </div>
-          </div>
-          <div id="bio_row" class="d-flex align-items-center gap-2 flex-wrap">
-            <div class="stat_text">Bio</div>
-            <div class="flex-grow-1 info-cell">
-              <span class="stat_val_span"></span>
-            </div>
-          </div>
+    <% if(!duck){ %>
+    <div class="mb-4">
+      <div class="selector-card">
+        <select id="duckSelect" name="duckSelect" class="form-select selector-select">
+          <option value="" selected disabled hidden>Select a duck here!</option>
+        </select>
+      </div>
+    </div>
+    <%}%>
 
-          <div
-            id="strength_bar"
-            class="d-flex align-items-center gap-2 flex-wrap"
-          >
-            <div class="stat_text">Strength</div>
-            <div class="progress flex-grow-1">
-              <div
-                class="progress-bar bg-warning"
-                role="progressbar"
-                style="width: 0%"
-              >
-                <span class="stat_val_span"></span>
-              </div>
-            </div>
-          </div>
-          <div
-            id="health_bar"
-            class="d-flex align-items-center gap-2 flex-wrap"
-          ><div class="stat_text">Health</div>
-            <div class="progress flex-grow-1">
-              <div
-                class="progress-bar bg-primary"
-                role="progressbar"
-                style="width: 0%"
-              >
-                <span class="stat_val_span"></span>
-              </div>
-            </div>
-          </div>
-          <div
-            id="intelligence_bar"
-            class="d-flex align-items-center gap-2 flex-wrap"
-          >
-            <div class="stat_text">Intelligence</div>
-            <div class="progress flex-grow-1">
-              <div
-                class="progress-bar bg-success"
-                role="progressbar"
-                style="width: 0%"
-              >
-                <span class="stat_val_span"></span>
-              </div>
-            </div>
-          </div>
-
-          <div id="focus_bar" class="d-flex align-items-center gap-2 flex-wrap">
-            <div class="stat_text">Focus</div>
-            <div class="progress flex-grow-1">
-              <div
-                class="progress-bar bg-danger"
-                role="progressbar"
-                style="width: 0%"
-              >
-                <span class="stat_val_span"></span>
-              </div>
-            </div>
-          </div>
-          <div
-            id="kindness_bar"
-            class="d-flex align-items-center gap-2 flex-wrap"
-          >
-            <div class="stat_text">Kindness</div>
-            <div class="progress flex-grow-1">
-              <div
-                class="progress-bar bg-info"
-                role="progressbar"
-                style="width: 0%"
-              >
-                <span class="stat_val_span"></span>
-              </div>
-            </div>
-          </div>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div id="ThreeDuck" class="waiting">
+          <img src="/images/Loading_Duck 1.gif" id="loading_img" alt="" />
         </div>
       </div>
-      <div class="row mt-4" id="chat_section" style="display: none">
-        <div class="col-12">
-          <div class="card">
-            <div class="card-header">Duck Chat</div>
-            <div id="startChatDiv">
-              <button id="startChatButton" class="btn btn-primary w-100">
-                Start Chat
-              </button>
+
+      <div class="col-md-6">
+        <div class="duck-profile-card">
+
+          <!-- Name & Assembler -->
+          <% if (!duck) { %>
+          <div id="duck_select_prompt" class="duck-select-prompt">Please select a duck</div>
+          <% } %>
+          <div id="name_row" <% if (!duck) { %>style="display:none"<% } %>>
+            <h2 class="duck-profile-name"><span class="stat_val_span"><%= duck ? duck.name : '' %></span></h2>
+          </div>
+          <div id="assembler_row" class="duck-profile-assembler" <% if (!duck) { %>style="display:none"<% } %>>
+            Assembled by <strong><span class="stat_val_span"><%= duck ? duck.assembler : '' %></span></strong>
+          </div>
+
+          <hr class="profile-divider">
+
+          <!-- Info Rows -->
+          <div id="duck_info_container">
+            <div id="id_row" class="profile-info-row">
+              <span class="profile-info-label">ID</span>
+              <span class="profile-info-value"><span class="stat_val_span"></span></span>
+            </div>
+            <div id="adjectives_row" class="profile-info-row">
+              <span class="profile-info-label">Adjectives</span>
+              <span class="profile-info-value"><span class="stat_val_span"></span></span>
+            </div>
+            <div id="bio_row" class="profile-info-row">
+              <span class="profile-info-label">Bio</span>
+              <span class="profile-info-value"><span class="stat_val_span"></span></span>
+            </div>
+          </div>
+
+          <!-- Attributes -->
+          <div class="attributes-section">
+            <div class="attributes-header">Attributes</div>
+
+            <div id="strength_bar" class="stat-row">
+              <span class="stat-label">Strength</span>
+              <div class="progress flex-grow-1">
+                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+              </div>
+              <span class="stat_val_span stat-number"></span>
+            </div>
+
+            <div id="health_bar" class="stat-row">
+              <span class="stat-label">Health</span>
+              <div class="progress flex-grow-1">
+                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+              </div>
+              <span class="stat_val_span stat-number"></span>
+            </div>
+
+            <div id="intelligence_bar" class="stat-row">
+              <span class="stat-label">Intelligence</span>
+              <div class="progress flex-grow-1">
+                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+              </div>
+              <span class="stat_val_span stat-number"></span>
+            </div>
+
+            <div id="focus_bar" class="stat-row">
+              <span class="stat-label">Focus</span>
+              <div class="progress flex-grow-1">
+                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+              </div>
+              <span class="stat_val_span stat-number"></span>
+            </div>
+
+            <div id="kindness_bar" class="stat-row">
+              <span class="stat-label">Kindness</span>
+              <div class="progress flex-grow-1">
+                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+              </div>
+              <span class="stat_val_span stat-number"></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Section -->
+    <div class="row mt-4" id="chat_section" style="display: none">
+      <div class="col-12">
+        <div class="card duck-chat-card">
+          <div class="card-header duck-chat-header" id="chatToggle" role="button">
+            <div class="duck-chat-info">
+              <div class="duck-chat-status"></div>
+              <div>
+                <div>Duck Chat</div>
+                <div class="duck-chat-subtitle" id="duckChatSubtitle"></div>
+              </div>
+            </div>
+            <div class="duck-chat-chevron">&#9660;</div>
+          </div>
+          <div id="chatCollapse" class="duck-chat-collapse duck-chat-open">
+            <div id="startChatDiv" class="duck-chat-start">
+              <p class="duck-chat-ready-text"><span id="duckReadyName"></span> is ready to chat. Press start to begin.</p>
+              <button id="startChatButton" class="btn btn-primary duck-start-btn">START CHAT</button>
             </div>
             <div class="card-body" id="chatBody">
               <div id="chat_messages"></div>
-
               <form id="chat_form" class="d-flex gap-2">
-                <input
-                  type="text"
-                  id="chat_input"
-                  class="form-control"
-                  placeholder="Ask the duck something..."
-                />
+                <input type="text" id="chat_input" class="form-control" placeholder="Ask the duck something..." />
                 <button type="submit" class="btn btn-primary">Send</button>
               </form>
               <div class="alert alert-danger mt-3 py-2 small">
                 <strong>Disclaimer:</strong> This AI is for entertainment purposes only. Do not share
-                                personal or sensitive information. Responses
-                                will often be intentionally inaccurate and
-                                should not be taken as advice or relied upon for
-                                decisions.
-                </div>
+                personal or sensitive information. Responses will often be intentionally inaccurate and
+                should not be taken as advice or relied upon for decisions.
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-        }
-      }
-    </script>
 
-    <script type="module" src="/js/app.js"></script>
-  </body>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module" src="/js/app.js"></script>
+</body>
 </html>
